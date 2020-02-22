@@ -13,4 +13,9 @@ Cryptographic system UI must be developed that contains:
   2. Encrypt and decrypt a file Ukrainian and English.
   3. About the app and developer
   4. Exit
-  
+
+Implement system validation: validate input data.
+
+Tests of the system:
+  * Unit tests
+  * Functional tests
