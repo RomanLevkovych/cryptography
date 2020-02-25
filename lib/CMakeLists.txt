@@ -12,7 +12,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Qt5 COMPONENTS Core REQUIRED)
 
 add_library(lib SHARED
-  lib.cpp
   caesar_cipher.cc
 )
 

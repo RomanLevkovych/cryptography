@@ -39,31 +39,73 @@ ApplicationWindow {
         anchors.fill: parent
         spacing: 5
 
-        Rectangle {
-            Layout.preferredWidth: parent.width / 2
-            Layout.fillHeight: true
+        ColumnLayout {
+            Layout.preferredHeight: parent.height
+            Layout.preferredWidth: (parent.width - 2*parent.spacing) / 3
 
-            border {
-                color: "black"
-                width: 1
+            Text {
+                id: toEncryptTextCst
+                text: "To encrypt"
             }
 
-            Flickable {
-                id: flickable
-                anchors.fill: parent
+            Rectangle {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
 
-                TextArea.flickable: TextArea {
-                    text: "TextArea\n...\n...\n...\n...\n...\n...\n"
-                    wrapMode: TextArea.Wrap
+                border {
+                    color: "black"
+                    width: 1
                 }
 
-                ScrollBar.vertical: ScrollBar { }
+                Flickable {
+                    anchors.fill: parent
+
+                    TextArea.flickable: TextArea {
+                        id: textToEncrypt
+                        placeholderText: "Text to encrypt is here."
+                        wrapMode: TextArea.Wrap
+                        Layout.fillHeight: true
+                    }
+                    ScrollBar.vertical: ScrollBar { }
+                }
             }
         }
 
         ColumnLayout {
-            Layout.preferredWidth: parent.width / 2
+            Layout.preferredHeight: parent.height
+            Layout.preferredWidth: (parent.width - 2*parent.spacing) / 3
 
+            Text {
+                id: encryptedTextCst
+                text: "Encrypted"
+            }
+
+            Rectangle {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+
+                border {
+                    color: "black"
+                    width: 1
+                }
+
+                Flickable {
+                    anchors.fill: parent
+
+                    TextArea.flickable: TextArea {
+                        id: encryptedText
+                        placeholderText: "Encrypted text is here."
+                        wrapMode: TextArea.Wrap
+                        Layout.fillHeight: true
+                    }
+                    ScrollBar.vertical: ScrollBar { }
+                }
+            }
+        }
+
+        ColumnLayout {
+            Layout.preferredHeight: parent.height
+            Layout.preferredWidth: (parent.width - 2*parent.spacing) / 3
             TabBar {
                 id: cryptMenu
                 Layout.fillWidth: true
@@ -106,9 +148,3 @@ ApplicationWindow {
         text: qsTr("Caesar cipher encryption/decryption.")
     }
 }
-
-/*##^##
-Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
-##^##*/
