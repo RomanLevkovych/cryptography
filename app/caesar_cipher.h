@@ -21,10 +21,12 @@ class CaesarCipher : public QObject {
       noexcept;
   Q_INVOKABLE QString decrypt(const QString data, qint32 key) const
       noexcept;
-  Q_INVOKABLE qint32 bruteForce(const QString text, QString alpha) const;
+  Q_INVOKABLE QString bruteForce(const QString text, QString alpha) const;
 
  private:
-  int GetPosition(QChar ch) const noexcept;
+  int getPosition(QChar ch) const noexcept;
+  QString filterSymbols(QString input) const;
+
 
  private:
   QString alphabet_;

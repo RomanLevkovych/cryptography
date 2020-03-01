@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QFile>
+#include <algorithm>
 #include <numeric>
 
 lib::CaesarCipher::CaesarCipher(QObject* parent) : QObject(parent) {
@@ -28,8 +29,8 @@ QString lib::CaesarCipher::encrypt(const QString data, qint32 key) const
     noexcept {
   return std::accumulate(
       data.begin(), data.end(), QString{""}, [key, this](auto init, auto item) {
-        if (-1 != GetPosition(item)) {
-          int e_pos = GetPosition(item) + key;
+        if (-1 != getPosition(item)) {
+          int e_pos = getPosition(item) + key;
           e_pos -= e_pos >= alphabet_.size() ? alphabet_.size() : 0;
           init += alphabet_[e_pos];
         } else {
@@ -43,8 +44,8 @@ QString lib::CaesarCipher::decrypt(const QString data, qint32 key) const
     noexcept {
   return std::accumulate(
       data.begin(), data.end(), QString{""}, [key, this](auto init, auto item) {
-        if (-1 != GetPosition(item)) {
-          auto e_pos = GetPosition(item) - key;
+        if (-1 != getPosition(item)) {
+          auto e_pos = getPosition(item) - key;
           auto d_pos = (e_pos < 0) ? (e_pos + alphabet_.size()) : e_pos;
           init += alphabet_[d_pos];
         } else {
@@ -55,39 +56,50 @@ QString lib::CaesarCipher::decrypt(const QString data, qint32 key) const
       });
 }
 
-qint32 lib::CaesarCipher::bruteForce(const QString text, QString alpha) const {
-  QMap<QString, QString> str = {
-      {"en", "/Users/roman_levkovych/Projects/cryptography/wordsEN.txt"},
-      {"ua", "/Users/roman_levkovych/Projects/cryptography/wordsUK.txt"}};
+QString lib::CaesarCipher::bruteForce(const QString text, QString alpha) const {
+  QMap<QString, QString> str = {{"en", ":/wordsEN.txt"},
+                                {"ua", ":/wordsUK.txt"}};
   QByteArrayList t_dict;
   qDebug() << str[alpha];
   QFile file{str[alpha]};
   if (!file.open(QIODevice::ReadOnly)) {
+    qDebug() << "Error";
   }
   t_dict = file.readAll().split('\n');
   QStringList dict;
   for (QByteArray item : t_dict) {
+    if (item.contains('\r')) {
+      item.remove(item.indexOf('\r'), 1);
+    }
     dict.push_back(QString{item});
   }
   for (int i = 0; i < alphabet_.size(); ++i) {
-    QString res = decrypt(text, i);
-//    int count = 0;
-    for (QString item : res.split(' ')) {
-        qDebug() << item;
+    QString decrypted = decrypt(text, i);
+    QStringList res = filterSymbols(decrypted).split(' ');
+    qint32 count = 0;
+    for (QString item : res) {
       if (dict.contains(item.toLower())) {
-        return i;
+        qDebug() << "WTF increase count";
+        count++;
       }
     }
 
-    qDebug() << "\n\n";
-
-//    if (count >= res.split(' ').size() * 0.7) {
-//      return i;
-//    }
+    if (count >= res.size() * 0.6) {
+      return decrypted;
+    }
   }
-  return 0;
+  return "\\\\\No success";
 }
 
-int lib::CaesarCipher::GetPosition(QChar ch) const noexcept {
+int lib::CaesarCipher::getPosition(QChar ch) const noexcept {
   return alphabet_.indexOf(ch);
+}
+
+QString lib::CaesarCipher::filterSymbols(QString input) const {
+  QString result;
+  std::copy_if(
+      input.begin(), input.end(), std::back_inserter(result),
+      [](QChar symbol) { return symbol.isLetter() || symbol.isSpace(); });
+
+  return result;
 }
