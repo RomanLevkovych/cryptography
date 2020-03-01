@@ -2,6 +2,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
+import dev.rlevkovych 1.0
 
 ApplicationWindow {
     visible: true
@@ -13,9 +14,13 @@ ApplicationWindow {
         Menu {
             title: qsTr("File")
             Action { text: qsTr("Create") }
-            Action { text: qsTr("Open") }
+            Action {
+                text: qsTr("Open")
+                onTriggered: {
+                    openFileDialog.open()
+                }
+            }
             Action { text: qsTr("Save") }
-            Action { text: qsTr("Delete") }
         }
 
         Menu {
@@ -65,6 +70,7 @@ ApplicationWindow {
                         placeholderText: "Text to encrypt is here."
                         wrapMode: TextArea.Wrap
                         Layout.fillHeight: true
+                        enabled: encryptBtn.focus
                     }
                     ScrollBar.vertical: ScrollBar { }
                 }
@@ -97,6 +103,7 @@ ApplicationWindow {
                         placeholderText: "Encrypted text is here."
                         wrapMode: TextArea.Wrap
                         Layout.fillHeight: true
+                        enabled: dencryptBtn.focus
                     }
                     ScrollBar.vertical: ScrollBar { }
                 }
@@ -110,10 +117,12 @@ ApplicationWindow {
                 id: cryptMenu
                 Layout.fillWidth: true
                 TabButton {
+                    id: encryptBtn
                     text: qsTr("Encrypt")
                 }
 
                 TabButton {
+                    id: dencryptBtn
                     text: qsTr("Decrypt")
                 }
             }
@@ -122,14 +131,155 @@ ApplicationWindow {
                 currentIndex: cryptMenu.currentIndex
                 Item {
                     id: encrypt
-                    Text {
+
+                    Rectangle {
+                        id: asdf
+                        anchors {
+                            right: parent.right
+                            left: parent.left
+                            top: parent.top
+                        }
+                        implicitHeight: enrcyptKey.font.pixelSize + 3
+                        border {
+                            color: "black"
+                            width: 1
+                        }
+
+
+                        TextInput {
+                            id: enrcyptKey
+                            anchors.fill: parent
+                            validator : RegExpValidator { regExp : /-?[0-9]+/ }
+                        }
+                    }
+
+                    ButtonGroup {
+                        buttons: alphabetBtns1.children
+                    }
+
+                    Column {
+                        id: alphabetBtns1
+
+                        anchors {
+                            top: asdf.bottom
+                            topMargin: 10
+                            left: parent.left
+                            right: parent.right
+                        }
+
+                        RadioButton {
+                            text: qsTr("Ukraininan")
+                            onClicked: {
+                                cipher.setAlphabet("ua")
+                            }
+                        }
+
+                        RadioButton {
+                            text: qsTr("Latin")
+                            checked: true
+                            onClicked: {
+                                cipher.setAlphabet("en")
+                            }
+                        }
+                    }
+
+                    Button {
                         text: qsTr("encrypt")
+                        anchors {
+                            right: parent.right
+                            left: parent.left
+                            bottom: parent.bottom
+                        }
+
+                        onClicked: {
+                            encryptedText.text =
+                                    cipher.encrypt(textToEncrypt.text,
+                                                   cipher.convertKey(parseInt(enrcyptKey.text)))
+                        }
                     }
                 }
                 Item {
                     id: decrypt
-                    Text {
-                        text: qsTr("dencrypt")
+                    Rectangle {
+                        id: npt
+                        anchors {
+                            right: parent.right
+                            left: parent.left
+                            top: parent.top
+                        }
+                        implicitHeight: decryptKey.font.pixelSize + 3
+                        border {
+                            color: "black"
+                            width: 1
+                        }
+
+
+                        TextInput {
+                            id: decryptKey
+                            anchors.fill: parent
+                            validator : RegExpValidator { regExp : /-?[0-9]+/ }
+                        }
+                    }
+
+                    ButtonGroup {
+                        buttons: alphabetBtns.children
+                    }
+
+                    Column {
+                        id: alphabetBtns
+
+                        anchors {
+                            top: npt.bottom
+                            topMargin: 10
+                            left: parent.left
+                            right: parent.right
+                        }
+
+                        RadioButton {
+                            text: qsTr("Ukraininan")
+                            onClicked: {
+                                cipher.setAlphabet("ua")
+                            }
+                        }
+
+                        RadioButton {
+                            id: ltn
+                            text: qsTr("Latin")
+                            checked: true
+                            onClicked: {
+                                cipher.setAlphabet("en")
+                            }
+                        }
+                    }
+
+                    Button {
+                        text: "Brute force"
+                        anchors {
+                            right: parent.right
+                            left: parent.left
+                            bottom: dec.top
+                            bottomMargin: 10
+                        }
+
+                        onClicked: {
+                            textToEncrypt.text = cipher.bruteForce(encryptedText.text, ltn.checked ? "en" : "ua")
+                        }
+                    }
+
+                    Button {
+                        id: dec
+                        text: qsTr("Decrypt")
+                        anchors {
+                            right: parent.right
+                            left: parent.left
+                            bottom: parent.bottom
+                        }
+
+                        onClicked: {
+                            textToEncrypt.text =
+                                    cipher.decrypt(encryptedText.text,
+                                                   cipher.convertKey(parseInt(decryptKey.text)))
+                        }
                     }
                 }
             }
@@ -146,5 +296,21 @@ ApplicationWindow {
         id: aboutDeveloper
         title: qsTr("About the developer")
         text: qsTr("Caesar cipher encryption/decryption.")
+    }
+
+    FileDialog {
+        id: openFileDialog
+        onAccepted: {
+            textToEncrypt.text = fs.readFile(fileUrl.toString())
+        }
+    }
+
+    FileDialog {
+        id: createFileDialog
+        selectExisting: false
+
+        onAccepted: {
+            fs.saveFile(fileUrl, encryptedText.text)
+        }
     }
 }

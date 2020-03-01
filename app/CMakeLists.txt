@@ -20,6 +20,12 @@ add_executable(app
   alphabet.h
   main.cpp
   qml.qrc
+  dict.qrc
+)
+
+add_custom_target(app_headers SOURCES
+    file_system.h
+    caesar_cipher.h
 )
 
 target_compile_features(app PUBLIC cxx_std_17)
