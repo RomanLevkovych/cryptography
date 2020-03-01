@@ -13,12 +13,14 @@ find_package(Qt5 COMPONENTS Core REQUIRED)
 
 add_library(lib SHARED
   caesar_cipher.cc
+  file_system.cc
 )
 
 add_custom_target(lib_headers SOURCES
-    include/lib_global.h
     include/caesar_cipher.h
-    include/caesar_cipher_interface.h)
+    include/file_system.h
+    include/alphabet.h
+)
 
 target_link_libraries(lib PRIVATE Qt5::Core)
 

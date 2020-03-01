@@ -8,5 +8,5 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_subdirectory(third_party/googletest)
 add_subdirectory(app)
-add_subdirectory(lib)
-add_subdirectory(test)
+#add_subdirectory(lib)
+#add_subdirectory(test)
