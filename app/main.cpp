@@ -17,7 +17,6 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
-
 //    qmlRegisterType<lib::Alphabet>("com.rlevkovych",1, 0, "Alphabet");
     qmlRegisterUncreatableType<Alphabet>("dev.rlevkovych", 1, 0, "Alphabet", "error");
     qRegisterMetaType<Alphabet::CipherAlphabet>("Alphabet.CAlphabet");

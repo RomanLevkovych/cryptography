@@ -47,7 +47,6 @@ ApplicationWindow {
     RowLayout {
         anchors.fill: parent
         spacing: 5
-
         ColumnLayout {
             Layout.preferredHeight: parent.height
             Layout.preferredWidth: (parent.width - 2*parent.spacing) / 3
@@ -135,7 +134,6 @@ ApplicationWindow {
                 currentIndex: cryptMenu.currentIndex
                 Item {
                     id: encrypt
-
                     Rectangle {
                         id: asdf
                         anchors {
@@ -301,7 +299,6 @@ ApplicationWindow {
         title: qsTr("About the developer")
         text: qsTr("Caesar cipher encryption/decryption.")
     }
-
     FileDialog {
         id: openFileDialog
         onAccepted: {
@@ -318,3 +315,10 @@ ApplicationWindow {
         }
     }
 }
+}
+
+/*##^##
+Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+##^##*/

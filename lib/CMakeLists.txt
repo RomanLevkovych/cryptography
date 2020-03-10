@@ -25,7 +25,6 @@ add_custom_target(lib_headers SOURCES
 target_link_libraries(lib PRIVATE Qt5::Core)
 
 target_compile_definitions(lib PRIVATE LIB_LIBRARY)
-
 target_include_directories(lib
     PUBLIC
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
