@@ -28,8 +28,8 @@ QString lib::CaesarCipher::encrypt(const QString data, qint32 key) const
     noexcept {
   return std::accumulate(
       data.begin(), data.end(), QString{""}, [key, this](auto init, auto item) {
-        if (-1 != GetPosition(item)) {
-          int e_pos = GetPosition(item) + key;
+        if (-1 != getPosition(item)) {
+          int e_pos = getPosition(item) + key;
           e_pos -= e_pos >= alphabet_.size() ? alphabet_.size() : 0;
           init += alphabet_[e_pos];
         } else {
@@ -43,8 +43,8 @@ QString lib::CaesarCipher::decrypt(const QString data, qint32 key) const
     noexcept {
   return std::accumulate(
       data.begin(), data.end(), QString{""}, [key, this](auto init, auto item) {
-        if (-1 != GetPosition(item)) {
-          auto e_pos = GetPosition(item) - key;
+        if (-1 != getPosition(item)) {
+          auto e_pos = getPosition(item) - key;
           auto d_pos = (e_pos < 0) ? (e_pos + alphabet_.size()) : e_pos;
           init += alphabet_[d_pos];
         } else {
@@ -88,6 +88,6 @@ qint32 lib::CaesarCipher::bruteForce(const QString text, QString alpha) const {
   return 0;
 }
 
-int lib::CaesarCipher::GetPosition(QChar ch) const noexcept {
+int lib::CaesarCipher::getPosition(QChar ch) const noexcept {
   return alphabet_.indexOf(ch);
 }

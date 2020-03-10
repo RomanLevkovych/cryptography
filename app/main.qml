@@ -13,14 +13,18 @@ ApplicationWindow {
     menuBar: MenuBar {
         Menu {
             title: qsTr("File")
-            Action { text: qsTr("Create") }
             Action {
                 text: qsTr("Open")
                 onTriggered: {
                     openFileDialog.open()
                 }
             }
-            Action { text: qsTr("Save") }
+            Action {
+                text: qsTr("Save")
+                onTriggered: {
+                    saveFileDialog.open()
+                }
+            }
         }
 
         Menu {
@@ -306,7 +310,7 @@ ApplicationWindow {
     }
 
     FileDialog {
-        id: createFileDialog
+        id: saveFileDialog
         selectExisting: false
 
         onAccepted: {
