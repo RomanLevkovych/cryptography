@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>wordsEN.txt</file>
+        <file>wordsUK.txt</file>
+    </qresource>
+</RCC>
