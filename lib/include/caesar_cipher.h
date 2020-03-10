@@ -24,7 +24,7 @@ class CaesarCipher : public QObject {
   Q_INVOKABLE qint32 bruteForce(const QString text, QString alpha) const;
 
  private:
-  int GetPosition(QChar ch) const noexcept;
+  int getPosition(QChar ch) const noexcept;
 
  private:
   QString alphabet_;

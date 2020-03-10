@@ -315,7 +315,7 @@ ApplicationWindow {
         }
     }
 }
-}
+
 
 /*##^##
 Designer {

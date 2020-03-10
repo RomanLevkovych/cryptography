@@ -88,7 +88,7 @@ QString lib::CaesarCipher::bruteForce(const QString text, QString alpha) const {
       return decrypted;
     }
   }
-  return "\\\\\No success";
+  return "No success";
 }
 
 int lib::CaesarCipher::getPosition(QChar ch) const noexcept {
